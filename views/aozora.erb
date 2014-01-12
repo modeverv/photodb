@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="sjis">
+    <link rel="icon" href="http://ja.gravatar.com/userimage/14611836/d5caef2a5366cf647fc8fba3430e5854.png" type="image/png">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="taketori.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="nehan2.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="jsaozora.js"></script>
+<script>function tate(){}</script>    
+    <title>AozoraReader</title>
+    <style>
+/* vertical grids
+-------------------------------------------------------------- 
+ * 
+ * Basic 14px Rule
+ *  - 14px * 1.5  = 21px
+ *  - 12px * 1.75 = 21px
+ *  - 24px * 1.75 = 42px
+ *  - 1.75 * 2 = 3.5 = 0.875 + 2.625
+ *  
+ *  font-size: 72px; line-height: 1;
+ *  font-size: 24px; line-height: 1.75; margin-bottom: 0.875em; margin-top: 2.625em;
+ *  font-size: 21px; line-height: 1;    margin-bottom: 1em;     margin-top: 2em;
+ *  font-size: 14px; line-height: 1.5;  margin-bottom: 1.5em;
+ *  font-size: 12px; line-height: 1.75; margin-bottom: 1.75em;
+ *  
+-------------------------------------------------------------- */
+* {
+  margin:0;padding:0;
+}
+body {
+  background:black;
+  color:white;
+}
+.text {
+  font-family:serif;
+  font-size:24px;
+  font-weight:normal;
+  line-height:1.75;
+  margin-bottom:0.875em;
+  margin-top:2.625em;
+  padding:2em;
+}
+    </style>
+
+  </head>
+  <body>
+<input type="file" id="file" name="fileName" size="100"> 
+<input type="submit" name="submit" value="送信" onclick="readFile();return false;">
+<div id="main" class="text"></div>
+  </body>
+</html>
+
+
+
+
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>photodb</title>
+    <link rel="icon" href="http://ja.gravatar.com/userimage/14611836/d5caef2a5366cf647fc8fba3430e5854.png" type="image/png">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/photodb/public/pc.css?<%=Time.now.to_i.to_s%>" type="text/css" media="screen" />
+    <link href="/photodb/public/iphone.css?<%=Time.now.to_i.to_s%>" rel="stylesheet" type= "text/css" media="only screen and (max-device-width: 480px)">
+
+    <script type="text/javascript" src="/photodb/public/jquery.js"></script>
+<script>
+<% if @config == "sinatra" %>
+var  config = "sinatra";
+<% else %>
+var  config = "websocket";
+<% end %>
+</script>
+    
+    <script type="text/javascript" src="/photodb/public/photodb.js?<%=Time.now.to_i.to_s%>"></script>
+
+  </head>
+  <body>
+    <header>
+      <h1>photodb<span id="echoarea"></span></h1>
+      <div class="search">
+        <form onsubmit="run();return false;" style="float:left;">
+          <input type="text" style="float:left;" class="text_field" id="query">
+          <input type="button" style="float:left;" class='submit_button' onclick="run2();return false;" value="Search">
+<!--          
+          <input type="button" style="float:left;" class='submit_button' onclick="run3();return false;" value="Search">
+-->          
+        </form>
+<!--        
+          <input type="button" style="float:left;" class='submit_button' onclick="run1();return false;" value="Search1">
+          -->
+      </div>
+    </header>
+
+    <div id="wrapper">
+      <div id="grayout">
+        <img id='loadergif' src='/photodb/public/loader.gif' width='128px' height='128px' alt='Loading..'>
+      </div>
+      <div id="side">&nbsp;</div>
+      <div id="pain">&nbsp;</div>
+      <div id="popup">
+        <div id="exifarea"></div>
+        <div id="imgarea"></div>
+      </div>
+    </div>
+
+    <footer><p>modeverv＠gmail.com</p></footer>
+  </body>
+</html>
+
+

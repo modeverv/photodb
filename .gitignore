@@ -1,0 +1,7 @@
+*.log
+log/*
+tmp/log/*
+tmp/pids/*
+tmp/sessions/*
+tmp/sockets/*
+*_flymake*

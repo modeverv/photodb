@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"><script type="text/javascript" src="/imagereader/filereader.js?<%=Time.now.to_i.to_s%>"></script>
+
+    <link rel="icon" href="http://ja.gravatar.com/userimage/14611836/d5caef2a5366cf647fc8fba3430e5854.png" type="image/png">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<!--    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+-->
+
+    <title>ImageReader</title>
+    <style>
+*{margin:0;padding:0;}
+.images { height:100%}
+    </style>
+    
+<script type="text/javascript" src="/imagereader/filereader.js?<%=Time.now.to_i.to_s%>"></script>
+<script>
+window.onload = function(){
+  linklist.set_arrray = <%= @imagefiles %> ;
+  getNext();
+};
+</script>   
+  </head>
+  <body>
+    <style>
+#overlay {
+  bottom:0;
+  position:fixed;
+}
+.float{
+  float:left;
+}
+ </style>    
+<div id="overlay">
+  <div id="path"></div>
+</div>
+<div id="sub" class="float"></div>
+<div id="main" class="float"></div>
+
+  </body>
+</html>
+
+
+
+
+
