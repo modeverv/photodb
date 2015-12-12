@@ -1,14 +1,24 @@
 #! /usr/bin/env ruby
 # -*-coding:utf-8-*-
+require 'kconv'
 require 'bson'
 require 'mongo'
 require 'mongoid'
 require 'exifr'
 require 'RMagick'
 require 'kconv'
-require 'MeCab'
+#begin
+#  require 'MeCab'
+#rescue
+#end
+begin
+  require 'mecab'
+rescue
+end
+require 'active_support/concern'
 
-#Mongoid.load!( File.dirname(__FILE__) + "/mongoid.yml",:production)
+#Mongoid.load!( File.dirname(__FILE__) + "/mongoid.yml" ,:production)
+#Mongoid.load!( File.dirname(__FILE__) + "/mongoid.yml")
 
 Mongoid.configure do |config|
   config.master = Mongo::Connection.new('localhost').db('photo-mongoid2')
@@ -17,6 +27,7 @@ end
 
 class Dirmodel
   include Mongoid::Document
+  
   field :path, type: String, :default => ''
   field :name, type: String, :default => ''
   field :created_at, :type => DateTime, :default => Time.now
@@ -53,19 +64,20 @@ class Photomodel
   has_and_belongs_to_many :dirmodels
   
   def set_search
+    require 'kconv'
     tags = self.tag.split(' ').map{|e|"t:#{e}"}.join('|')
     self.exif = '{}' if exif.nil? || exif == ''
     tmp = self.exif.gsub(/{/,'').gsub(/}/,'').split(',')
 
     exifs = tmp.map{|e|"e:#{e}" }.join('|').gsub('"','')
-    self.search = "p:#{path.downcase}|#{exifs.downcase}|#{tags.downcase}"
+    self.search = "p:#{path.downcase}|#{exifs.downcase}|#{tags.downcase}".encode('utf-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
 
     mecab = MeCab::Tagger.new("-Owakati")
     strs = []
     strs << "#{path}" 
     strs << tmp.map{|e| "#{e.downcase.toutf8}" }.join(' ').gsub('"','')
-    exifs2 = mecab.parse(strs.join('')).split(' ').uniq
-    self.search2 = exifs2 
+    exifs2 = mecab.parse(strs.join('')).encode('utf-8',{:invalid => :replace, :undef => :replace, :replace => '?'}).split(' ').uniq
+    self.search2 = exifs2
   end
 
   def self.search_photo(query,sfield="search",page=1,per=10)
@@ -113,7 +125,7 @@ class Photomodel
     [status,rets]
   end
 
-  def updat_thumb_m
+  def update_thumb_m
     return unless self.thumb_m.nil? || self.thumb_m64.nil?
     buff_m = `convert -define jpeg:size=400x300 -resize 400x300 -quality 90 -strip "#{path}" -`
     self.thumb_m = BSON::Binary.new buff_m
@@ -163,20 +175,24 @@ class Photomodel
     end
 
     def update_thumb_s
-      rets = []
+      puts "UPDATE_THUMB_S"
+      # rets = []
       photos = Photomodel.all
       photos.each do |photo|
-        rets << photo.path 
+        puts photo.path
+        # rets << photo.path 
         photo.update_thumb_s
         photo.save
       end
     end
 
     def update_thumb_m
-      rets = []
+      puts "UPDATE_THUMB_M"
+      # rets = []
       photos = Photomodel.all
       photos.each do |photo|
-        rets << photo.path 
+        puts photo.path
+        # rets << photo.path 
         photo.update_thumb_m
         photo.save
       end
@@ -196,25 +212,23 @@ class Photomodel
     end
     
     def update_db
-#      delete_not_exist_entry
+      delete_not_exist_entry
       rets = []     
       require File.dirname(__FILE__)+'/globmodel'     
       gs = GlobServer.new(server: "/var/smb/sdb1",folders: ["photo"])
-      gs.media_glob
+      # gs.media_glob
       
       puts gs.files.count
-      gs.files.each do |e|
-        puts e[:path]
-        rets << e[:path]
-        unless Photomodel.where(:path => e[:path]).first.nil?
+      gs.each do |e|
+        unless Photomodel.where(:path => e).first.nil?
           next
         end
         puts "do make model:#{e}"
-        Photomodel.path2object(e[:path])
+        Photomodel.path2object(e)
       end
-      rets << Photomodel.update_thumb_s
-      rets << Photomodel.update_thumb_m
-      return rets.flatten
+      # rets << Photomodel.update_thumb_s
+      # rets << Photomodel.update_thumb_m
+      # return rets.flatten
     end
     
     def path2object(path)

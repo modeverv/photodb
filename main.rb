@@ -7,7 +7,7 @@ require File.dirname(__FILE__)+'/globmodel'
 
 require 'will_paginate'
 
-USERNAME = "user"
+USERNAME = "seijiro"
 PASS = "hoge"
 
 ### helper ##################
